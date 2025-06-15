@@ -1,0 +1,17 @@
+# Evaluation
+all_preds, all_probs, all_labels = [], [], []
+detector.eval()
+with torch.no_grad():
+    for videos, labels in test_loader:
+        videos, labels = videos.to(DEVICE), labels.to(DEVICE)
+        b, t, c, h, w = videos.shape
+        videos = videos.view(-1, c, h, w)
+        features = feature_extractor(videos).view(b, t, -1)
+        outputs = detector(features).view(-1)
+        probs = outputs.cpu()
+        preds = (probs > 0.5).int()
+        all_probs.extend(probs)
+        all_preds.extend(preds)
+        all_labels.extend(labels.cpu().int())
+        # Inside your evaluation loop
+print("Batch labels:", labels.tolist())  # Add this line
