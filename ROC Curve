@@ -1,0 +1,4 @@
+# ROC Curve
+fpr, tpr, _ = roc_curve(all_labels, all_probs)
+roc_auc = roc_auc_score(all_labels, all_probs)
+print(f"ROC AUC: {roc_auc:.4f}")
