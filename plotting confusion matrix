@@ -1,0 +1,34 @@
+import torch
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Put model in eval mode
+detector.eval()
+
+y_true = []
+y_pred = []
+
+with torch.no_grad():
+    for videos, labels in test_loader:
+        videos, labels = videos.to(DEVICE), labels.to(DEVICE)
+        b, t, c, h, w = videos.shape
+        videos = videos.view(-1, c, h, w)
+        features = feature_extractor(videos).view(b, t, -1)
+        outputs = detector(features).view(-1)
+        preds = (outputs > 0.5).int()
+
+        y_true.extend(labels.cpu().numpy())
+        y_pred.extend(preds.cpu().numpy())
+
+# Compute and plot confusion matrix
+cm = confusion_matrix(y_true, y_pred)
+labels = ['Real', 'Fake']
+
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=labels, yticklabels=labels)
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+plt.title("Confusion Matrix")
+plt.tight_layout()
+plt.show()
