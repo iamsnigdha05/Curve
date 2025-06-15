@@ -1,0 +1,4 @@
+ # Confusion Matrix
+cm = confusion_matrix(all_labels, all_preds)
+print("Confusion Matrix:")
+print(cm)
