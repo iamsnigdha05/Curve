@@ -1,0 +1,4 @@
+import matplotlib.pyplot as plt
+plt.hist([p.item() for p in all_probs], bins=50)
+plt.title("Prediction Probabilities")
+plt.show()
